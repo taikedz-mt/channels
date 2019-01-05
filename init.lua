@@ -17,10 +17,13 @@ end
 
 local function remind_global_off()
 	if not channels.allow_global_channel and channels.suggested_channel then
-		channels.say_chat("*server*",
-            "<*server*> Out-of-channel chat is off." .. 
-            "(try '/channel join " .. channels.suggested_channel .. "' ?)"
-        )
+        local players_online = minetest.get_connected_players()
+        if #players_online > 0 then
+            channels.say_chat("*server*",
+                "<*server*> Out-of-channel chat is off." ..
+                "(try '/channel join " .. channels.suggested_channel .. "' ?)"
+            )
+        end
 	end
 end
 
