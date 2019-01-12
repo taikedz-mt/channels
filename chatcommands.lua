@@ -25,7 +25,7 @@ minetest.register_chatcommand("channel", {
 		local args = param:split(" ")
 
 		if args[1] == "join" and #args == 2 then
-			channels.command_set(name, args[2])
+			channels.command_join(name, args[2])
 			return
 
 		elseif args[1] == "invite" and #args == 2 then
@@ -109,7 +109,7 @@ function channels.command_online(name)
 	minetest.chat_send_player(name, "Online players in this channel: " .. players)
 end
 
-function channels.command_set(name, param)
+function channels.command_join(name, param)
 	if param == "" then
 		minetest.chat_send_player(name, "Error: Empty channel name")
 		return
@@ -151,6 +151,7 @@ function channels.command_set(name, param)
 		scale		= {x = 200,y = 25},
 		alignment	= {x = 0, y = 0},
 	})
+    channels:save()
 	channels.say_chat("", "# " .. name .. " joined the channel", param)
 end
 
@@ -176,4 +177,6 @@ function channels.command_leave(name)
 		player:hud_remove(channels.huds[name])
 		channels.huds[name] = nil
 	end
+
+    channels:save()
 end

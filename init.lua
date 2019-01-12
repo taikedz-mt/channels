@@ -7,6 +7,7 @@ channels.disable_private_messages = minetest.settings:get_bool("channels.disable
 channels.suggested_channel = minetest.settings:get("channels.suggested_channel")
 
 dofile(minetest.get_modpath("channels") .. "/chatcommands.lua")
+dofile(minetest.get_modpath("channels") .. "/saves.lua")
 
 
 
@@ -65,8 +66,18 @@ minetest.register_on_chat_message(function(name, message)
 	return true
 end)
 
+minetest.register_on_joinplayer(function(player)
+    local name = player:get_player_name()
+	local playerchannel = channels.players[name]
+    if playerchannel then
+        channels.players[name] = nil -- leave channel temporarily, to re-register the HUD
+        channels.command_join(name, playerchannel)
+        minetest.chat_send_player(name, "Joined chat channel #"..playerchannel)
+    end
+end)
+
 minetest.register_on_leaveplayer(function(player)
 	local name = player:get_player_name()
-	channels.players[name] = nil
+	-- do not nil channels.players[name]; it forms part of the data for saving
 	channels.huds[name] = nil
 end)
