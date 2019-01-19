@@ -56,9 +56,6 @@ minetest.register_on_chat_message(function(name, message)
 			minetest.chat_send_player(name, "No channel selected. Run '/channel' for more info")
 			-- return true to prevent subsequent/global handler from kicking in
 			return true
-		else
-			-- return false to indicate we have not handled the chat
-			return false
 		end
 	end
 	
